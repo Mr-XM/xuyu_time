@@ -1,13 +1,16 @@
-package com.xuyu.tool;
+package com.xuyu.mysql;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.xuyu.message.Teacher;
+import com.xuyu.tool.TimeUtils;
+import com.youzan.open.sdk.util.misc.TimeUtil;
+import com.xuyu.message.WxApi;
+import com.xuyu.message.WxContext;
 
 /**
  * 数据库操作
@@ -113,10 +116,10 @@ public class SqlHelper {
 	    	sql.setString(5, null);
 	    	sql.setString(6, null);
 	    	sql.setString(7, null);
+	    	
 			sql.executeUpdate();
     		sql.close();
 	    	ps.CloseConnect();
-	    	//out.print("文案提交成功");
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -140,7 +143,7 @@ public class SqlHelper {
 			res=sql.executeQuery("select * from teacher_time where user_id='"+user_id+"'");
 			while(res.next())
 			{
-				teacher= new Teacher(res.getString("user"),res.getString("name"),res.getInt("flag"));
+				teacher= new Teacher(res.getString("user"),res.getString("name"),res.getDate("flag"));
 			}
 			sql.close();
 			con.close();
@@ -158,13 +161,14 @@ public class SqlHelper {
 	 */
 	public boolean updateData(String data,String user_id) {
 		try{
+			java.sql.Date date =new java.sql.Date(System.currentTimeMillis());
 			MysqlConnect ps=new MysqlConnect();
 		    Connection con;
 	    	PreparedStatement sql; 
 	    	con=ps.getConnect();
 	 	    sql=con.prepareStatement("update teacher_time set data=?,flag=? where user_id = '"+user_id+"'");
 	 	    sql.setString(1,data);
-	 	    sql.setInt(2, 1);
+	 	    sql.setDate(2,date);
     		sql.executeUpdate();
     		sql.close();
 	    	ps.CloseConnect();
@@ -179,11 +183,10 @@ public class SqlHelper {
 	 * 添加新成员(先判断是否存在数据库，不存在才添加)
 	 * @param userId
 	 * @param user
-	 * @param flag
 	 * @param tel
 	 * @param name
 	 */
-	public void addTeacher(String userId, String user, int flag, String tel, String name) {
+	public void addTeacher(String userId, String user, String tel, String name) {
 		try {
 			MysqlConnect ps=new MysqlConnect();
 		    Connection con;
@@ -197,19 +200,17 @@ public class SqlHelper {
 				    Connection con1;
 			    	PreparedStatement sql1; 
 			    	con1=ps.getConnect();
-			 	    sql1=con1.prepareStatement("insert into teacher_time(user_id,name,user,flag,tel)"+"values(?,?,?,?,?)");
+			 	    sql1=con1.prepareStatement("insert into teacher_time(user_id,name,user,tel)"+"values(?,?,?,?)");
 			    	sql1.setString(1,userId);
 		    		sql1.setString(2,name);
 		    		sql1.setString(3,user);
-		    		sql1.setInt(4,flag);
-		    		sql1.setString(5,tel);
+		    		sql1.setString(4,tel);
 		    		
 		    		sql1.executeUpdate();
 		    		sql1.close();
 			    	ps.CloseConnect();
 				}catch(Exception e){
 					e.printStackTrace();
-					//response.sendRedirect("fail.jsp");
 				}
 	        }
     		sql.close();
@@ -219,33 +220,37 @@ public class SqlHelper {
 		}
 	}
 
-
-	/**
-	 * 获取第二天所有有课老师的User_id,即客户下单 IDEL库存为0的商品
-	 * @param week
-	 * @return
-	 */
-	public static List<Teacher> getUserId(String week) {
-		List<Teacher> list = new ArrayList<>();
+	public static List<Teacher> getNotSetTimeTeacher(){
+		List<Teacher> list=new ArrayList<>();
 		try {
-			MysqlConnect ps = new MysqlConnect();
+			Set<Teacher> set = new HashSet<>();
+			MysqlConnect ps=new MysqlConnect();
 			Connection con;
 			Statement sql;
+			con=ps.getConnect();
 			ResultSet res;
-			con = ps.getConnect();
-			sql = con.createStatement();
-			res = sql.executeQuery("select * from teacher_time where " + week + " is not null");
-			while (res.next()) {
-				Teacher teacher = new Teacher(res.getString("user"), res.getString(week), res.getString("name"));
-				list.add(teacher);
+			sql=con.createStatement();
+			res=sql.executeQuery("select * from teacher_time");
+			while(res.next())
+			{
+				if(TimeUtils.getTimeDifference(new java.util.Date())<7){
+					Teacher teacher= new Teacher(res.getString("user"),res.getString("name"),res.getDate("flag"));
+					set.add(teacher);
+				}
 			}
 			sql.close();
 			con.close();
-			ps.CloseConnect();
-
-		} catch (Exception e1) {
-			e1.printStackTrace();
+			List<Teacher> listAllTeacher=WxApi.getUerId(WxContext.getInstance().getAccessToken());
+			for(int i=0;i<listAllTeacher.size();i++){
+				if(!set.contains(listAllTeacher.get(i))){
+					list.add(listAllTeacher.get(i));
+					System.out.println(listAllTeacher.get(i).getUserId());
+				}
+			}
+		}catch (Exception e){
+			e.printStackTrace();
 		}
 		return list;
 	}
+
 }

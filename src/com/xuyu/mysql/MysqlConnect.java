@@ -1,4 +1,4 @@
-package com.xuyu.tool;
+package com.xuyu.mysql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

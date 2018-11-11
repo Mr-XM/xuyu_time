@@ -21,11 +21,11 @@ public class YouzanGoods {
 	 */
 	private int sku_id;
 
-	public YouzanGoods(int p, String t, String s, int skuid) {
-		price = p;
-		time = t;
-		skus = s;
-		sku_id = skuid;
+	public YouzanGoods(int price, String time, String skus, int sku_id) {
+		this.price = price;
+		this.time = time;
+		this.skus = skus;
+		this.sku_id = sku_id;
 	}
 
 	public int getPrice() {

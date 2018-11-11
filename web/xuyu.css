@@ -1,0 +1,55 @@
+#submitButton{
+    font-family: 宋体;
+    font-size: 14px;
+    width: 70px;
+    height: 28px;
+    line-height: 28px;
+    color: white;
+    background-color: #7FFFD4;
+    border-radius: 6px;
+    border: 0;
+    float: right;
+
+}
+#contentTextarea{
+    width:80%;/*自动适应父布局宽度*/
+    overflow:auto;
+    word-break:break-all;
+}
+#pageBody{ background:#FFEBCD}
+
+input:checked + span {
+    color: #ADFF2F;
+    font-weight: bold;
+}
+
+#defaultCheckedCheckbox+ span {
+    color: #FF7F50;
+    font-weight: bold;
+}
+
+#ownCheckedCheckbox + span {
+    color: #ADFF2F;
+    font-weight: bold;
+}
+
+#replaceButton {
+    font-size: 14px;
+    font-family: 宋体;
+
+    width: 70px;
+    height: 28px;
+    line-height: 28px;
+    color: white;
+    background-color: #7FFFD4;
+    border-radius: 6px;
+    border: 0;
+
+    float: left;
+}
+#promptTable{
+    border: 1px dashed #F00;
+    width: 90%;
+    height: 60px;
+    margin-top: 10px
+}

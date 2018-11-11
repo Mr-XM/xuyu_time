@@ -4,48 +4,31 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-        <welcome-file>index.htm</welcome-file>
-        <welcome-file>index.jsp</welcome-file>
-        <welcome-file>default.html</welcome-file>
-        <welcome-file>default.htm</welcome-file>
-        <welcome-file>default.jsp</welcome-file>
-    </welcome-file-list>
-
-    <listener>
-        <listener-class>com.xuyu.message.RemindMessageListener</listener-class>
-    </listener>
-
-    <listener>
-        <listener-class>com.xuyu.tool.MysqlTableInitListener</listener-class>
-    </listener>
-
     <servlet>
-        <servlet-name>CopywriteDeal</servlet-name>
-        <servlet-class>com.xuyu.servlet.CopywriteDeal</servlet-class>
+        <servlet-name>CopywriteServlet</servlet-name>
+        <servlet-class>com.xuyu.servlet.CopywriteServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>CopywriteDeal</servlet-name>
-        <url-pattern>/CopywriteDeal</url-pattern>
+        <servlet-name>CopywriteServlet</servlet-name>
+        <url-pattern>/CopywriteServlet</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>DataDeal</servlet-name>
-        <servlet-class>com.xuyu.servlet.DataDeal</servlet-class>
+        <servlet-name>UpdateGoodAndSqlServlet</servlet-name>
+        <servlet-class>com.xuyu.servlet.UpdateGoodAndSqlServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>DataDeal</servlet-name>
-        <url-pattern>/DataDeal</url-pattern>
+        <servlet-name>UpdateGoodAndSqlServlet</servlet-name>
+        <url-pattern>/UpdateGoodAndSqlServlet</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>WxOauth</servlet-name>
+        <servlet-name>WxOauthServlet</servlet-name>
         <servlet-class>com.xuyu.servlet.WxOauthServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>WxOauth</servlet-name>
-        <url-pattern>/oauth</url-pattern>
+        <servlet-name>WxOauthServlet</servlet-name>
+        <url-pattern>/WxOauthServlet</url-pattern>
     </servlet-mapping>
 
 

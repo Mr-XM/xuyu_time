@@ -6,31 +6,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes"/>
-    <style>
-        input:checked + span {
-            color: #ADFF2F;
-            font-weight: bold;
-        }
-
-        #aaaa + span {
-            color: #FF7F50;
-            font-weight: bold;
-        }
-
-        #aaa + span {
-            color: #FF7F50;
-            font-weight: bold;
-        }
-
-        .bor {
-            border: 1px dashed #F00;
-            width: 90%;
-            height: 60px;
-            margin-top: 10px
-        }
-
-    </style>
-    <jsp:useBean id="sqlhelper" class="com.xuyu.tool.SqlHelper">
+    <link rel="stylesheet" type="text/css" href="/teacher_time.css"/>
+    <jsp:useBean id="sqlhelper" class="com.xuyu.mysql.SqlHelper">
 
     </jsp:useBean>
     <jsp:useBean id="myurl" class="com.xuyu.tool.MyURL">
@@ -55,26 +32,27 @@
     <%@page import="org.apache.commons.lang3.StringUtils" %>
     <%@page import="com.xuyu.message.Status" %>
     <%@page import="com.xuyu.tool.ErrHandler" %>
+    <%@ page import="com.xuyu.tool.TimeUtils" %>
     <%
         /**
          *无效链接
          */
-        int urlInvalid = 0;
+        final int urlInvalid = 0;
 
         /**
          * 页面失效
          */
-        int pageInvalid =1;
+        final int pageInvalid = 1;
 
         /**
          * 链接与你身份不匹配
          */
-        int urlMatch = 2;
+        final int urlMatch = 2;
 
         /**
          * 有赞商城编码错误
          */
-        int youzanCodeError = 3;
+        final int youzanCodeError = 3;
         String encryptedUserId = null;
         String isOauthFlag = request.getParameter("f");
         String userId = null;
@@ -108,13 +86,13 @@
             String AccessToken = WxContext.getInstance().getAccessToken();
             Teacher teacher;
             teacher = WxApi.getTeacher(AccessToken, userId);
-            sqlhelper.addTeacher(encryptedUserId, teacher.getUserId(), 0, teacher.getMobile(), teacher.getName());
+            sqlhelper.addTeacher(encryptedUserId, teacher.getUserId(),teacher.getMobile(), teacher.getName());
         } else {
             out.println(ErrHandler.Error(urlMatch));
             return;
         }
         Teacher teacher = sqlhelper.getTeacher(encryptedUserId);
-        int isSetTimeFlag = teacher.getFlag();
+        Date SetTimeFlag = teacher.getFlag();
         userId = teacher.getUserId();
         String name = teacher.getName();
     %>
@@ -123,7 +101,7 @@
 </head>
 <body>
 <%
-    if (isSetTimeFlag == Status.FLAG_SETTED) {
+    if (TimeUtils.getTimeDifference(SetTimeFlag)<7) {
         response.sendRedirect("showSuccess.jsp?u=" + encryptedUserId + "&n=" + name);
         return;
 
@@ -195,11 +173,12 @@
 
                     for (int j = 0; j < 3; j++) {
                         if (choosed.contains(k)) {%>
-                <input type="checkbox" id="aaaa" name="time1" onclick="return false;" value="<%=k++%>" checked>
+                <input type="checkbox" class="defaultCheckedCheckbox" name="time1" onclick="return false;"
+                       value="<%=k++%>" checked>
 
                 <%
                 } else {%>
-                <input type="checkbox" id="zxc" class="2" name="time1" value="<%=k++%>">
+                <input type="checkbox" name="time1" value="<%=k++%>">
                 <%
                     }
                 %>
@@ -229,11 +208,11 @@
         %>
     </table>
     <br>
-    <table class=bor align="center">
+    <table id="promptTable" align="center">
 
         <tr>
-            <td align="center"><input type="checkbox" id="aaa" value="上午" onclick="return false;"
-                                      checked="checked" class="namm"><span>时间</span></td>
+            <td align="center"><input type="checkbox" id="defaultCheckedCheckbox" value="上午" onclick="return false;"
+                                      checked="checked"><span>时间</span></td>
             <td align="left">表示有学生已经预定该时段课程</td>
         </tr>
         <tr>
@@ -249,8 +228,7 @@
     </table>
     <br>
     <br>
-    <div align="center"><input type="submit" value="提交"
-                               style="width:50px; line-height:22px; background-color:#7FFFD4; border:none; display:block; color:#000000;">
+    <div align="center"><input type="submit" value="提交" id="submitButton">
     </div>
 </form>
 

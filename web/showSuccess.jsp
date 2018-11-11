@@ -6,27 +6,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes"/>
-    <style>
-        input:checked + span {
-            color: #ADFF2F;
-            font-weight: bold;
-        }
-
-        #asd + span {
-            color: #FF7F50;
-            font-weight: bold;
-        }
-
-        #asd1 + span {
-            color: #ADFF2F;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/showSuccess.css" />
     <%@page import="java.util.*" %>
     <%@page import="com.xuyu.youzan.YouzanApi" %>
     <%@page import="org.apache.commons.lang3.StringUtils" %>
     <%@page import="com.xuyu.message.Teacher" %>
-    <jsp:useBean id="get" class="com.xuyu.tool.SqlHelper"></jsp:useBean>
+    <jsp:useBean id="get" class="com.xuyu.mysql.SqlHelper"></jsp:useBean>
     <%
         String EncryptedUserId = request.getParameter("u");
         Teacher teacher = get.getTeacher(EncryptedUserId);
@@ -103,7 +88,7 @@
                         if (cnt_choose.contains(k)) {
             %>
 
-            <input type="checkbox" id="asd" name="time1" onclick="return false;" value="<%=k++%>" checked>
+            <input type="checkbox" id="defaultCheckedCheckbox" name="time1" onclick="return false;" value="<%=k++%>" checked>
             <span>
 			            			<%
                                         switch (j % 3) {
@@ -121,7 +106,7 @@
             &nbsp;
             &nbsp;
             <% } else {%>
-            <input type="checkbox" id="asd1" name="time1" onclick="return false;" value="<%=k++%>" checked>
+            <input type="checkbox" id="ownCheckedCheckbox" name="time1" onclick="return false;" value="<%=k++%>" checked>
             <span>
 		            		<%
                                 switch (j % 3) {
@@ -142,7 +127,7 @@
                 }
             } else {
             %>
-            <input type="checkbox" id="zxc" class="2" onclick="return false;" name="time1" value="<%=k++%>"
+            <input type="checkbox" onclick="return false;" name="time1" value="<%=k++%>"
                    style="visibility:hidden">
             <span style="visibility:hidden">
 		            		<%

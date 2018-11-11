@@ -10,7 +10,7 @@ import com.xuyu.message.Teacher;
 
 
 import com.xuyu.tool.Change;
-import com.xuyu.tool.SqlHelper;
+import com.xuyu.mysql.SqlHelper;
 import com.xuyu.youzan.YouzanApi;
 
 
@@ -19,13 +19,13 @@ import com.xuyu.youzan.YouzanApi;
  * 也将从老师设置的时间界面获取对应的值，找到其中标志为 IDLE 保存在对应的数据库表项里
  */
 
-public class DataDeal extends HttpServlet {
+public class UpdateGoodAndSqlServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DataDeal() {
+    public UpdateGoodAndSqlServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -35,7 +35,7 @@ public class DataDeal extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub
-        doPost(request, response);
+        //doPost(request, response);
     }
 
     /**
@@ -66,12 +66,12 @@ public class DataDeal extends HttpServlet {
         }
 
         //根据有课标志获取全部标志为IDLE的ItemNo
-        String[] Itemno = chg.getIDLEItemNo(HasClass);
+        String[] ItemNo = chg.getIDLEItemNo(HasClass);
 
         //数据库初始化商家编码
         sqh.initdayItem(userId);
         //数据库将商家编码添加到monday～sunday
-        sqh.setdayItem(userId, Itemno);
+        sqh.setdayItem(userId, ItemNo);
 
 
         StringBuffer s = new StringBuffer();

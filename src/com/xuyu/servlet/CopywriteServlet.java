@@ -1,6 +1,6 @@
 package com.xuyu.servlet;
 
-import com.xuyu.tool.MysqlConnect;
+import com.xuyu.mysql.MysqlConnect;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,13 +15,13 @@ import java.sql.PreparedStatement;
 /**
  * 文案处理类，从前端界面读取文案信息，更新到数据库
  */
-public class CopywriteDeal extends HttpServlet {
+public class CopywriteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CopywriteDeal() {
+    public CopywriteServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

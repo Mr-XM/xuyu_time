@@ -95,6 +95,19 @@ public class TimeUtils {
 
 		return weekDays[w];
 	}
+
+	/**
+	 * 获取时间相差的天数
+	 * @param date
+	 * @return
+	 */
+	public static int getTimeDifference(Date date){
+		Date nowdate =new Date();
+		long times1 = date.getTime();
+		long times2 = nowdate.getTime();
+		int days = (int)((times2-times1)/1000/60/60/24);
+		return days;
+	}
 	/**
 	 * 根据周几获取I值
 	 * @param a 周几
@@ -231,16 +244,7 @@ public class TimeUtils {
 		return i;
 	}
 
-	//public static void main(String[] arg) {
-			/*System.out.println(new AboutTime().change("周一上午"));
-			System.out.println(new AboutTime().change("周二下午"));
-			System.out.println(new AboutTime().change("周三晚上"));
-			System.out.println(new AboutTime().change("周四下午"));
-			System.out.println(new AboutTime().change("周五上午"));
-			System.out.println(new AboutTime().change("周六下午"));
-			System.out.println(new AboutTime().change("周日晚上"));*/
-		//System.out.println(new AboutTime().difference(new AboutTime().getWeekOfDate(new Date())));
-		//System.out.println(new AboutTime().getNextweekday(new Date(),new AboutTime().difference(new AboutTime().getWeekOfDate(new Date()))+1));
-		//System.out.println(new AboutTime().getNextweekday(new Date(),new AboutTime().difference(new AboutTime().getWeekOfDate(new Date()))-6));
-	//}
+	/*public static void main(String[] arg) {
+		System.out.println(getTimeDifference(getThisMondayDate(new Date())));
+	}*/
 }

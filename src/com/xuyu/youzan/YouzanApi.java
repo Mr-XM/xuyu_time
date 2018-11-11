@@ -50,44 +50,6 @@ public class YouzanApi {
             return null;
         }
     }
-	/**
-	 * 判断库存是否为0
-	 * @param itemNo 
-	 * @param itemId
-	 * @return
-	 */
-	public static boolean isHasClass(String itemNo,Long itemId) {
-    	String accessToken = YouzanContext.getInstance().getAccessToken();
-        YZClient client = new DefaultYZClient(new Token(accessToken));
-        YouzanSkusCustomGetParams youzanSkusCustomGetParams = new YouzanSkusCustomGetParams();
-        youzanSkusCustomGetParams.setItemId(itemId);
-        youzanSkusCustomGetParams.setItemNo(itemNo);
-        YouzanSkusCustomGet youzanSkusCustomGet = new YouzanSkusCustomGet();
-        youzanSkusCustomGet.setAPIParams(youzanSkusCustomGetParams);
-        YouzanSkusCustomGetResult result = client.invoke(youzanSkusCustomGet);
-    	
-    	try {
-            ObjectMapper mapper = new ObjectMapper();  
-            JSONObject jsonObj = new JSONObject(mapper.writeValueAsString(result));
-            JSONArray array =jsonObj.getJSONArray("skus");
-            boolean has=false;
-            for(int i=0;i<array.length();i++) {
-            	int quantity=array.getJSONObject(i).getInt("quantity");
-            	if(quantity==0) {
-                	has = true;
-                	break;
-                }else {
-                	has = false;
-                }
-            }
-            return has;
-            
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
 
 	/**
 	 * 创建一个sku_stocks json字符串

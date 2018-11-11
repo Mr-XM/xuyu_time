@@ -9,42 +9,27 @@
     <title>为设置人员名单</title>
 </head>
 <body>
-<%@ page import="com.xuyu.tool.MysqlConnect" %>
-<%@ page import="java.sql.Statement" %>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.ResultSet" %>
+<%@ page import="com.xuyu.mysql.SqlHelper" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.xuyu.message.Teacher" %>
 <h4 align="center">未设置上课时间人员名单</h4>
 <%
-    try {
-        MysqlConnect ps = new MysqlConnect();
-        Connection con;
-        Statement sql;
-        ResultSet res;
-        con = ps.getConnect();
-        sql = con.createStatement();
-        res = sql.executeQuery("select * from teacher_time where flag = 0");
+    List<Teacher> list = SqlHelper.getNotSetTimeTeacher();
 %>
 <br>
 <table align="center" width="100%" style="line-height:35px;">
     <tr>
-        <td align="left">姓名</td>
-        <td align="left">电话</td>
+        <td align="center">姓名</td>
+        <td align="center">电话</td>
     </tr>
     <%
-        while (res.next()) {
-    %>
-    <tr>
-        <td align="left"><%=res.getString("name") %>
-        </td>
-        <td align="left"><%=res.getString("tel") %>
-        </td>
-    </tr>
+        for(int i=0;i<list.size();i++){
+            %>
+            <tr>
+                <td align="center"><%=list.get(i).getName()%></td>
+                <td align="center"><%=list.get(i).getMobile()%></td>
+            </tr>
     <%
-            }
-            sql.close();
-            con.close();
-        } catch (Exception e1) {
-            e1.printStackTrace();
         }
     %>
 </table>
