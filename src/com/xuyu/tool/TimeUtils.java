@@ -102,10 +102,13 @@ public class TimeUtils {
 	 * @return
 	 */
 	public static int getTimeDifference(Date date){
-		Date nowdate =new Date();
-		long times1 = date.getTime();
-		long times2 = nowdate.getTime();
-		int days = (int)((times2-times1)/1000/60/60/24);
+		int days =8;
+		if(date!=null){
+			Date nowdate =new Date();
+			long times1 = date.getTime();
+			long times2 = nowdate.getTime();
+			days = (int)((times2-times1)/1000/60/60/24);
+		}
 		return days;
 	}
 	/**

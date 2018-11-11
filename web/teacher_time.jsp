@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes"/>
-    <link rel="stylesheet" type="text/css" href="/teacher_time.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/xuyu.css"/>
     <jsp:useBean id="sqlhelper" class="com.xuyu.mysql.SqlHelper">
 
     </jsp:useBean>
@@ -86,13 +86,13 @@
             String AccessToken = WxContext.getInstance().getAccessToken();
             Teacher teacher;
             teacher = WxApi.getTeacher(AccessToken, userId);
-            sqlhelper.addTeacher(encryptedUserId, teacher.getUserId(),teacher.getMobile(), teacher.getName());
+            sqlhelper.addTeacher(encryptedUserId, teacher.getUserId(), teacher.getMobile(), teacher.getName());
         } else {
             out.println(ErrHandler.Error(urlMatch));
             return;
         }
         Teacher teacher = sqlhelper.getTeacher(encryptedUserId);
-        Date SetTimeFlag = teacher.getFlag();
+        Date setTimeFlag = teacher.getFlag();
         userId = teacher.getUserId();
         String name = teacher.getName();
     %>
@@ -101,9 +101,12 @@
 </head>
 <body>
 <%
-    if (TimeUtils.getTimeDifference(SetTimeFlag)<7) {
-        response.sendRedirect("showSuccess.jsp?u=" + encryptedUserId + "&n=" + name);
-        return;
+    if(setTimeFlag!=null){
+        if (TimeUtils.getTimeDifference(setTimeFlag) < 7 ) {
+            response.sendRedirect("showSuccess.jsp?u=" + encryptedUserId + "&n=" + name);
+            return;
+
+        }
 
     } else {
 
@@ -173,7 +176,7 @@
 
                     for (int j = 0; j < 3; j++) {
                         if (choosed.contains(k)) {%>
-                <input type="checkbox" class="defaultCheckedCheckbox" name="time1" onclick="return false;"
+                <input type="checkbox" id="defaultCheckedCheckbox" name="time1" onclick="return false;"
                        value="<%=k++%>" checked>
 
                 <%
@@ -211,7 +214,7 @@
     <table id="promptTable" align="center">
 
         <tr>
-            <td align="center"><input type="checkbox" id="defaultCheckedCheckbox" value="上午" onclick="return false;"
+            <td align="center"><input type="checkbox" id="exampleDefaultCheckedCheckbox" value="上午" onclick="return false;"
                                       checked="checked"><span>时间</span></td>
             <td align="left">表示有学生已经预定该时段课程</td>
         </tr>
@@ -228,7 +231,7 @@
     </table>
     <br>
     <br>
-    <div align="center"><input type="submit" value="提交" id="submitButton">
+    <div align="center"><input type="submit" value="提交" id="teacherTimeSubmitButton">
     </div>
 </form>
 

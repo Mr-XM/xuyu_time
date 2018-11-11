@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes"/>
-    <link rel="stylesheet" type="text/css" href="/setTimeSubmit.css" />
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/xuyu.css"/>
     <%
         String name = new String(request.getParameter("n").getBytes("ISO-8859-1"), "UTF-8");
     %>
@@ -27,7 +27,7 @@
 <%@ page import="com.xuyu.tool.TimeUtils" %>
 <%
 
-    if (TimeUtils.getTimeDifference(flag)>7||flag.toString().isEmpty()) {
+    if (TimeUtils.getTimeDifference(flag)>7||flag==null) {
 %>
 <h3 align="center">请确定您的可上课时间</h3>
 <form action="UpdateGoodAndSqlServlet?u=<%=EncryptedUserId %>" method="post">
@@ -129,7 +129,7 @@
                     }
                 } else {
                 %>
-                <input type="checkbox" id="zxc" onclick="return false;" name="time1" value="<%=k++%>"
+                <input type="checkbox"  onclick="return false;" name="time1" value="<%=k++%>"
                        style="visibility:hidden">
                 <span style="visibility:hidden">
 		            		<%

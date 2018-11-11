@@ -23,12 +23,12 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>WxOauthServlet</servlet-name>
+        <servlet-name>WxOauth</servlet-name>
         <servlet-class>com.xuyu.servlet.WxOauthServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>WxOauthServlet</servlet-name>
-        <url-pattern>/WxOauthServlet</url-pattern>
+        <servlet-name>WxOauth</servlet-name>
+        <url-pattern>/oauth</url-pattern>
     </servlet-mapping>
 
 
