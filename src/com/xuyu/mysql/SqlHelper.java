@@ -26,14 +26,15 @@ public class SqlHelper {
     	try{
 			MysqlConnect ps=new MysqlConnect();
 		    Connection con;
-	    	PreparedStatement sql; 
+	    	PreparedStatement preparedStatement;
 	    	con=ps.getConnect();
-	    	sql=con.prepareStatement("update teacher_time set BeginTime = ?,OverTime = ? where user_id ='"+user_id+"'");
-	 	    sql.setString(1,begintime);
-	 	    sql.setString(2,overtime);
-    		sql.executeUpdate();
-    		sql.close();
-	    	ps.closeConnect();
+	    	preparedStatement=con.prepareStatement("update teacher_time set BeginTime = ?,OverTime = ? where user_id ='"+user_id+"'");
+	 	    preparedStatement.setString(1,begintime);
+	 	    preparedStatement.setString(2,overtime);
+    		preparedStatement.executeUpdate();
+
+
+	    	ps.closeConnect(con,preparedStatement,null);
 	    	
 		}catch(Exception e){
 			e.printStackTrace();
@@ -51,18 +52,19 @@ public class SqlHelper {
 		try {
 			MysqlConnect ps=new MysqlConnect();
 		    Connection con;
-	    	Statement sql;
+	    	PreparedStatement statement;
 			ResultSet res;
 	    	con=ps.getConnect();
-	    	sql=con.createStatement();
-	       	res=sql.executeQuery("select * from teacher_time where user_id='"+user_id+"'");
+	    	String sql="select * from teacher_time where user_id='"+user_id+"'";
+	    	statement=con.prepareStatement(sql);
+	       	res=statement.executeQuery();
 	        while(res.next())
 	       	{
 	        	value[0]=res.getString("BeginTime");
 	        	value[1]=res.getString("OverTime");
 	       	}
-	       	sql.close();
-	       	con.close();
+
+			ps.closeConnect(con,statement,res);
 		}catch(Exception e1) {
 			e1.printStackTrace();
 		}
@@ -78,19 +80,18 @@ public class SqlHelper {
     	try{
 			MysqlConnect ps=new MysqlConnect();
 		    Connection con;
-	    	PreparedStatement sql; 
+	    	PreparedStatement preparedStatement;
 	    	con=ps.getConnect();
-	    	sql=con.prepareStatement("update teacher_time set Monday = ?,Tuesday = ?,Wednesday = ?,Thursday = ?,Friday = ?,Saturday = ?,Sunday = ? where user_id ='"+user_id+"'");
-	 	    sql.setString(1,data[0]);
-	 	    sql.setString(2,data[1]);
-	 	    sql.setString(3,data[2]);
-	 	    sql.setString(4,data[3]);
-	 	    sql.setString(5,data[4]);
-	 	    sql.setString(6,data[5]);
-	 	    sql.setString(7,data[6]);
-    		sql.executeUpdate();
-    		sql.close();
-	    	ps.closeConnect();
+	    	preparedStatement=con.prepareStatement("update teacher_time set Monday = ?,Tuesday = ?,Wednesday = ?,Thursday = ?,Friday = ?,Saturday = ?,Sunday = ? where user_id ='"+user_id+"'");
+	 	    preparedStatement.setString(1,data[0]);
+	 	    preparedStatement.setString(2,data[1]);
+	 	    preparedStatement.setString(3,data[2]);
+	 	    preparedStatement.setString(4,data[3]);
+	 	    preparedStatement.setString(5,data[4]);
+	 	    preparedStatement.setString(6,data[5]);
+	 	    preparedStatement.setString(7,data[6]);
+
+	    	ps.closeConnect(con,preparedStatement,null);
 	    	
 		}catch(Exception e){
 			e.printStackTrace();
@@ -105,21 +106,19 @@ public class SqlHelper {
 		try{
 			MysqlConnect ps=new MysqlConnect();
 		    Connection con;
-		    PreparedStatement sql; 
+		    PreparedStatement preparedStatement;
 	    	con=ps.getConnect();
-	    	sql=con.prepareStatement("update teacher_time set Monday = ?,Tuesday = ?,Wednesday = ?,Thursday = ?,Friday = ?,Saturday = ?,Sunday = ? where user_id ='"+user_id+"'");
+	    	preparedStatement=con.prepareStatement("update teacher_time set Monday = ?,Tuesday = ?,Wednesday = ?,Thursday = ?,Friday = ?,Saturday = ?,Sunday = ? where user_id ='"+user_id+"'");
 	    	
-	    	sql.setString(1, null);
-	    	sql.setString(2, null);
-	    	sql.setString(3, null);
-	    	sql.setString(4, null);
-	    	sql.setString(5, null);
-	    	sql.setString(6, null);
-	    	sql.setString(7, null);
-	    	
-			sql.executeUpdate();
-    		sql.close();
-	    	ps.closeConnect();
+	    	preparedStatement.setString(1, null);
+	    	preparedStatement.setString(2, null);
+	    	preparedStatement.setString(3, null);
+	    	preparedStatement.setString(4, null);
+	    	preparedStatement.setString(5, null);
+	    	preparedStatement.setString(6, null);
+	    	preparedStatement.setString(7, null);
+
+	    	ps.closeConnect(con,preparedStatement,null);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -136,17 +135,18 @@ public class SqlHelper {
 		try {
 			MysqlConnect ps=new MysqlConnect();
 			Connection con;
-			Statement sql;
+			PreparedStatement preparedStatement;
 			con=ps.getConnect();
 			ResultSet res;
-			sql=con.createStatement();
-			res=sql.executeQuery("select * from teacher_time where user_id='"+user_id+"'");
+			String sql="select * from teacher_time where user_id='"+user_id+"'";
+			preparedStatement=con.prepareStatement(sql);
+			res=preparedStatement.executeQuery();
 			while(res.next())
 			{
 				teacher= new Teacher(res.getString("user"),res.getString("name"),res.getDate("flag"));
 			}
-			sql.close();
-			con.close();
+
+			ps.closeConnect(con, preparedStatement,res);
 		}catch(Exception e1) {
 			e1.printStackTrace();
 		}
@@ -164,14 +164,15 @@ public class SqlHelper {
 			java.sql.Date date =new java.sql.Date(System.currentTimeMillis());
 			MysqlConnect ps=new MysqlConnect();
 		    Connection con;
-	    	PreparedStatement sql; 
+	    	PreparedStatement preparedStatement;
 	    	con=ps.getConnect();
-	 	    sql=con.prepareStatement("update teacher_time set data=?,flag=? where user_id = '"+user_id+"'");
-	 	    sql.setString(1,data);
-	 	    sql.setDate(2,date);
-    		sql.executeUpdate();
-    		sql.close();
-	    	ps.closeConnect();
+	 	    preparedStatement=con.prepareStatement("update teacher_time set data=?,flag=? where user_id = '"+user_id+"'");
+	 	    preparedStatement.setString(1,data);
+	 	    preparedStatement.setDate(2,date);
+    		preparedStatement.executeUpdate();
+
+
+	    	ps.closeConnect(con,preparedStatement,null);
 	    	return true;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -190,31 +191,30 @@ public class SqlHelper {
 		try {
 			MysqlConnect ps=new MysqlConnect();
 		    Connection con;
-		    PreparedStatement sql;
+		    PreparedStatement preparedStatement;
 		    ResultSet res;
 	    	con=ps.getConnect();
-			sql=con.prepareStatement("select * from teacher_time where user_id ='"+userId+"'");
-	        res=sql.executeQuery();
+			preparedStatement=con.prepareStatement("select * from teacher_time where user_id ='"+userId+"'");
+	        res=preparedStatement.executeQuery();
 	        if(!res.next()) {
 	        	try{
 				    Connection con1;
-			    	PreparedStatement sql1; 
+			    	PreparedStatement preparedStatement1;
 			    	con1=ps.getConnect();
-			 	    sql1=con1.prepareStatement("insert into teacher_time(user_id,name,user,tel)"+"values(?,?,?,?)");
-			    	sql1.setString(1,userId);
-		    		sql1.setString(2,name);
-		    		sql1.setString(3,user);
-		    		sql1.setString(4,tel);
+			 	    preparedStatement1=con1.prepareStatement("insert into teacher_time(user_id,name,user,tel)"+"values(?,?,?,?)");
+			    	preparedStatement1.setString(1,userId);
+		    		preparedStatement1.setString(2,name);
+		    		preparedStatement1.setString(3,user);
+		    		preparedStatement1.setString(4,tel);
 		    		
-		    		sql1.executeUpdate();
-		    		sql1.close();
-			    	ps.closeConnect();
+		    		preparedStatement1.executeUpdate();
+
+			    	ps.closeConnect(con,preparedStatement1,null);
 				}catch(Exception e){
 					e.printStackTrace();
 				}
 	        }
-    		sql.close();
-	    	ps.closeConnect();
+	    	ps.closeConnect(con,preparedStatement,res);
 		}catch(Exception e1) {
 			e1.printStackTrace();
 		}
@@ -226,11 +226,12 @@ public class SqlHelper {
 			Set<String> set = new HashSet<>();
 			MysqlConnect ps=new MysqlConnect();
 			Connection con;
-			Statement sql;
+			PreparedStatement preparedStatement;
 			con=ps.getConnect();
 			ResultSet res;
-			sql=con.createStatement();
-			res=sql.executeQuery("select * from teacher_time");
+			String sql="select * from teacher_time";
+			preparedStatement=con.prepareStatement(sql);
+			res=preparedStatement.executeQuery();
 			while(res.next())
 			{
 				if(TimeUtils.getTimeDifference(new java.util.Date())<7){
@@ -238,8 +239,7 @@ public class SqlHelper {
 					set.add(teacher.getUserId());
 				}
 			}
-			sql.close();
-			con.close();
+			ps.closeConnect(con,preparedStatement,res);
 			List<Teacher> listAllTeacher=WxApi.getUerId(WxContext.getInstance().getAccessToken());
 			for(int i=0;i<listAllTeacher.size();i++){
 				if(!set.contains(listAllTeacher.get(i).getUserId())){

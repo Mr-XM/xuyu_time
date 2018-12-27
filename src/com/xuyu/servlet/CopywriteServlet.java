@@ -47,14 +47,14 @@ public class CopywriteServlet extends HttpServlet {
         try {
             MysqlConnect ps = new MysqlConnect();
             Connection con;
-            PreparedStatement sql;
+            PreparedStatement preparedStatement;
             con = ps.getConnect();
-            sql = con.prepareStatement("insert into copywriting_table(banner,text)" + "values(?,?)");
-            sql.setString(1, text);
-            sql.setString(2, textarea);
-            sql.executeUpdate();
-            sql.close();
-            ps.closeConnect();
+            preparedStatement = con.prepareStatement("insert into copywriting_table(banner,text)" + "values(?,?)");
+            preparedStatement.setString(1, text);
+            preparedStatement.setString(2, textarea);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+            ps.closeConnect(con,preparedStatement,null);
             out.print("文案提交成功");
         } catch (Exception e) {
             e.printStackTrace();
