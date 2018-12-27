@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import com.xuyu.message.Teacher;
 
 
@@ -61,8 +62,10 @@ public class UpdateGoodAndSqlServlet extends HttpServlet {
         }
 
         //对存储有课标志的数组进行赋值
-        for (int i = 0; i < data1.length; i++) {
-            HasClass[Integer.parseInt(data1[i])] = Integer.parseInt(data1[i]);
+        if (!(data1 == null || (data1 != null && data1.length == 0))) {
+            for (int i = 0; i < data1.length; i++) {
+                HasClass[Integer.parseInt(data1[i])] = Integer.parseInt(data1[i]);
+            }
         }
 
         //根据有课标志获取全部标志为IDLE的ItemNo
@@ -76,19 +79,21 @@ public class UpdateGoodAndSqlServlet extends HttpServlet {
 
         StringBuffer s = new StringBuffer();
         String data;
-        for (int i = 0; i < data1.length; i++) {
-            if (i > 0 && i < data1.length) {
-                s.append(",");
+        if (!(data1 == null || (data1 != null && data1.length == 0))) {
+            for (int i = 0; i < data1.length; i++) {
+                if (i > 0 && i < data1.length) {
+                    s.append(",");
+                }
+                s.append(data1[i]);
+                //System.out.println(data1[i]);
             }
-            s.append(data1[i]);
-            //System.out.println(data1[i]);
         }
         data = s.toString();
 
         //更新数据库
         sqh.updateData(data, userId);
 
-        Teacher teacher =sqh.getTeacher(userId);
+        Teacher teacher = sqh.getTeacher(userId);
         String user = teacher.getUserId();
         String name = teacher.getName();
         //System.out.println(user+":"+name);
@@ -96,7 +101,7 @@ public class UpdateGoodAndSqlServlet extends HttpServlet {
 
         //同步到有赞商城
         String item = YouzanApi.getItem_id(user + ":" + name);
-        if (YouzanApi.updateGood(item, YouzanApi.creatSku_stocks(YouzanApi.getskus(Long.parseLong(item)), data1, YouzanApi.getCNT_CHOOSED(Long.parseLong(item))))) {
+        if (YouzanApi.updateGood(item, YouzanApi.createSkuStocks(YouzanApi.getSkus(Long.parseLong(item)), data1, YouzanApi.getCNT_CHOOSED(Long.parseLong(item))))) {
             response.sendRedirect("showSuccess.jsp?u=" + userId);
         } else {
             out.print("更新有赞库存失败！");

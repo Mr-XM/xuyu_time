@@ -8,7 +8,7 @@ import java.sql.SQLException;
  * 数据库连接和断开
  */
 public class MysqlConnect {
-	public static final String url = "jdbc:MySQL://localhost:3306/xuyujiajiao?characterEncoding=utf8&useSSL=true";
+	public static final String url = "jdbc:MySQL://localhost:3306/xuyujiajiao?characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=true";
 	public static final String name = "com.mysql.cj.jdbc.Driver";
 	Connection con;
 
@@ -19,13 +19,11 @@ public class MysqlConnect {
 	public Connection getConnect() {
 		try {
 			Class.forName(name);
-			//System.out.println("数据库驱动加载成功");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		try {
-			con = DriverManager.getConnection(url, "root", "4230980MENG");
-			//System.out.println("数据库连接成功");
+			con = DriverManager.getConnection(url, "root", "dai911029");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -36,10 +34,9 @@ public class MysqlConnect {
 	 * 断开数据库
 	 * @return
 	 */
-	public Connection CloseConnect() {
+	public Connection closeConnect() {
 		try {
 			con.close();
-			//System.out.println("数据库断开连接");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -49,6 +46,6 @@ public class MysqlConnect {
 	{
 		MysqlConnect c=new MysqlConnect();
 		c.getConnect();
-	    c.CloseConnect();
+	    c.closeConnect();
 	}*/
 }

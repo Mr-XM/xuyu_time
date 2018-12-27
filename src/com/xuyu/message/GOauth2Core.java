@@ -15,9 +15,7 @@ import com.xuyu.tool.Utils;
  * Oauth认证后根据code获取user_id
  */
 public class GOauth2Core {
-	// public static final String REDIRECT_URI = "http://139.129.135.173/xuyu_time4/oauth";
-	public static final String REDIRECT_URI = "http://xml2244.free.idcfengye.com/xuyu_time/oauth";
-	// public static String GET_CODE = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=CORP_ID&redirect_uri=REDIRECT_URI&response_type=code&scope=snsapi_userinfo#wechat_redirect";
+	public static final String REDIRECT_URI = "http://www.xuyutech.com/xuyu_time/oauth";
 	public static String GET_CODE = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=CORP_ID&redirect_uri=REDIRECT_URI&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
 
 	/**

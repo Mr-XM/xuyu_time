@@ -58,7 +58,7 @@ public class YouzanApi {
 	 * @param cnt 从有赞库存获得的不能选择的上课时间 IDLE库存为0（即被选择）
 	 * @return  构造好的，在更新商品信息用到的json字符串
 	 */
-	public static String creatSku_stocks(List<YouzanGoods> list,String data[],String cnt) {
+	public static String createSkuStocks(List<YouzanGoods> list, String data[], String cnt) {
 		String sku_stocks=null;
 		StringBuilder s=new StringBuilder();
 		TimeUtils abouttime=new TimeUtils();
@@ -84,7 +84,7 @@ public class YouzanApi {
 	 * @param numIid 用户的ItemId
 	 * @return
 	 */
-	public static List<YouzanGoods> getskus(Long numIid){
+	public static List<YouzanGoods> getSkus(Long numIid){
 		List<YouzanGoods> list = new ArrayList<>();
 		String accessToken = YouzanContext.getInstance().getAccessToken();
         YZClient client = new DefaultYZClient(new Token(accessToken));

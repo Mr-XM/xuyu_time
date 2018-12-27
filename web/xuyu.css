@@ -10,7 +10,7 @@ input:checked + span {
     width: 70px;
     height: 28px;
     line-height: 28px;
-    color: white;
+    color: black;
     background-color: #7FFFD4;
     border-radius: 6px;
     border: 0;
@@ -31,7 +31,7 @@ input:checked + span {
     width: 70px;
     height: 28px;
     line-height: 28px;
-    color: white;
+    color: black;
     background-color: #7FFFD4;
     border-radius: 6px;
     border: 0;
@@ -40,11 +40,14 @@ input:checked + span {
 }
 
 #teacherTimeSubmitButton {
-    width: 50px;
-    line-height: 22px;
+    font-family: 宋体;
+    font-size: 14px;
+    width: 70px;
+    height: 28px;
+    line-height: 28px;
     background-color: #7FFFD4;
     border: none;
-    display: block;
+    border-radius: 6px;
     color: #000000;
 }
 

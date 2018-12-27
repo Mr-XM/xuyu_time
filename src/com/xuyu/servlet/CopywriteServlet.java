@@ -54,7 +54,7 @@ public class CopywriteServlet extends HttpServlet {
             sql.setString(2, textarea);
             sql.executeUpdate();
             sql.close();
-            ps.CloseConnect();
+            ps.closeConnect();
             out.print("文案提交成功");
         } catch (Exception e) {
             e.printStackTrace();

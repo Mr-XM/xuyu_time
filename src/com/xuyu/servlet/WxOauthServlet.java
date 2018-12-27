@@ -17,8 +17,8 @@ public class WxOauthServlet extends HttpServlet{
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset = UTF-8");
         PrintWriter out = response.getWriter();
         String code = request.getParameter("code");
         String state = request.getParameter("state");
@@ -31,7 +31,7 @@ public class WxOauthServlet extends HttpServlet{
             request.setAttribute("state", state);
            
         } else {
-            out.print("授权获取失败，至于为什么，自己找原因。。。");
+            out.print("授权获取失败");
         }
         //获得userId和state改变f并跳转回去teacher_time.jsp
         request.getRequestDispatcher("teacher_time.jsp?f=1111").forward(request, response);

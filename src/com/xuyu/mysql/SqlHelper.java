@@ -33,7 +33,7 @@ public class SqlHelper {
 	 	    sql.setString(2,overtime);
     		sql.executeUpdate();
     		sql.close();
-	    	ps.CloseConnect();
+	    	ps.closeConnect();
 	    	
 		}catch(Exception e){
 			e.printStackTrace();
@@ -90,7 +90,7 @@ public class SqlHelper {
 	 	    sql.setString(7,data[6]);
     		sql.executeUpdate();
     		sql.close();
-	    	ps.CloseConnect();
+	    	ps.closeConnect();
 	    	
 		}catch(Exception e){
 			e.printStackTrace();
@@ -119,7 +119,7 @@ public class SqlHelper {
 	    	
 			sql.executeUpdate();
     		sql.close();
-	    	ps.CloseConnect();
+	    	ps.closeConnect();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -171,7 +171,7 @@ public class SqlHelper {
 	 	    sql.setDate(2,date);
     		sql.executeUpdate();
     		sql.close();
-	    	ps.CloseConnect();
+	    	ps.closeConnect();
 	    	return true;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -208,13 +208,13 @@ public class SqlHelper {
 		    		
 		    		sql1.executeUpdate();
 		    		sql1.close();
-			    	ps.CloseConnect();
+			    	ps.closeConnect();
 				}catch(Exception e){
 					e.printStackTrace();
 				}
 	        }
     		sql.close();
-	    	ps.CloseConnect();
+	    	ps.closeConnect();
 		}catch(Exception e1) {
 			e1.printStackTrace();
 		}
@@ -223,7 +223,7 @@ public class SqlHelper {
 	public static List<Teacher> getNotSetTimeTeacher(){
 		List<Teacher> list=new ArrayList<>();
 		try {
-			Set<Teacher> set = new HashSet<>();
+			Set<String> set = new HashSet<>();
 			MysqlConnect ps=new MysqlConnect();
 			Connection con;
 			Statement sql;
@@ -235,16 +235,15 @@ public class SqlHelper {
 			{
 				if(TimeUtils.getTimeDifference(new java.util.Date())<7){
 					Teacher teacher= new Teacher(res.getString("user"),res.getString("name"),res.getDate("flag"));
-					set.add(teacher);
+					set.add(teacher.getUserId());
 				}
 			}
 			sql.close();
 			con.close();
 			List<Teacher> listAllTeacher=WxApi.getUerId(WxContext.getInstance().getAccessToken());
 			for(int i=0;i<listAllTeacher.size();i++){
-				if(!set.contains(listAllTeacher.get(i))){
+				if(!set.contains(listAllTeacher.get(i).getUserId())){
 					list.add(listAllTeacher.get(i));
-					System.out.println(listAllTeacher.get(i).getUserId());
 				}
 			}
 		}catch (Exception e){

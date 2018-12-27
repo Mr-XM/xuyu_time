@@ -7,9 +7,6 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes"/>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/xuyu.css"/>
-    <%
-        String name = new String(request.getParameter("n").getBytes("ISO-8859-1"), "UTF-8");
-    %>
     <%@page import="com.xuyu.message.Teacher" %>
     <jsp:useBean id="sqlhelper" class="com.xuyu.mysql.SqlHelper"></jsp:useBean>
     <%
@@ -17,6 +14,7 @@
         Teacher teacher = sqlhelper.getTeacher(EncryptedUserId);
         Date flag = teacher.getFlag();
         String userId = teacher.getUserId();
+        String name = teacher.getName();
     %>
     <title>须臾私教-<%=name%>
     </title>
@@ -27,29 +25,35 @@
 <%@ page import="com.xuyu.tool.TimeUtils" %>
 <%
 
-    if (TimeUtils.getTimeDifference(flag)>7||flag==null) {
+    if (TimeUtils.getTimeDifference(flag) > 7 || flag == null) {
 %>
 <h3 align="center">请确定您的可上课时间</h3>
-<form action="UpdateGoodAndSqlServlet?u=<%=EncryptedUserId %>" method="post">
+<form action="UpdateGoodAndSqlServlet?u=<%=EncryptedUserId%>" method="post">
     <table align="center" border="1" width="100%" rules=cols frame=void style="line-height:35px;">
         <%
             String itemId = YouzanApi.getItem_id(userId + ":" + name);
-            String[] CNT_CHOOSED = YouzanApi.getCNT_CHOOSED(Long.parseLong(itemId)).split(",");
             Set choosed = new HashSet();
             Set cnt_choose = new HashSet();
             int k = 0;
             request.setCharacterEncoding("UTF-8");
-            String[] value = request.getParameterValues("time1");
-
-            for (int j = 0; j < value.length; j++) {
-                int a = Integer.valueOf(value[j]);
-                choosed.add(a);
+            if (request.getParameterValues("time1") != null) {
+                String[] value = request.getParameterValues("time1");
+                if (!(value == null && (value != null && value.length == 0))) {
+                    for (int j = 0; j < value.length; j++) {
+                        int a = Integer.valueOf(value[j]);
+                        choosed.add(a);
+                    }
+                }
             }
-            if (CNT_CHOOSED != null || (CNT_CHOOSED == null && CNT_CHOOSED.length != 0)) {
-                for (int i = 0; i < CNT_CHOOSED.length; i++) {
-                    if (!CNT_CHOOSED[i].equals("")) {
-                        int b = Integer.valueOf(CNT_CHOOSED[i]);
-                        cnt_choose.add(b);
+            String cnt = YouzanApi.getCNT_CHOOSED(Long.parseLong(itemId));
+            if (cnt != null) {
+                String[] CNT_CHOOSED = cnt.split(",");
+                if (!(CNT_CHOOSED == null && (CNT_CHOOSED != null && CNT_CHOOSED.length == 0))) {
+                    for (int i = 0; i < CNT_CHOOSED.length; i++) {
+                        if (!CNT_CHOOSED[i].equals("")) {
+                            int b = Integer.valueOf(CNT_CHOOSED[i]);
+                            cnt_choose.add(b);
+                        }
                     }
                 }
             }
@@ -90,7 +94,8 @@
                             if (cnt_choose.contains(k)) {
                 %>
 
-                <input type="checkbox" id="defaultCheckedCheckbox" name="time1" onclick="return false;" value="<%=k++%>" checked>
+                <input type="checkbox" id="defaultCheckedCheckbox" name="time1" onclick="return false;" value="<%=k++%>"
+                       checked>
                 <span>
 			            			<%
                                         switch (j % 3) {
@@ -108,7 +113,8 @@
                 &nbsp;
                 &nbsp;
                 <% } else {%>
-                <input type="checkbox" id="ownCheckedCheckbox" name="time1" onclick="return false;" value="<%=k++%>" checked>
+                <input type="checkbox" id="ownCheckedCheckbox" name="time1" onclick="return false;" value="<%=k++%>"
+                       checked>
                 <span>
 		            		<%
                                 switch (j % 3) {
@@ -129,7 +135,7 @@
                     }
                 } else {
                 %>
-                <input type="checkbox"  onclick="return false;" name="time1" value="<%=k++%>"
+                <input type="checkbox" onclick="return false;" name="time1" value="<%=k++%>"
                        style="visibility:hidden">
                 <span style="visibility:hidden">
 		            		<%
@@ -175,6 +181,7 @@
 
 
     } else {
+        
         response.sendRedirect("showSuccess.jsp?u=" + EncryptedUserId + "&n=" + name);
     }
 

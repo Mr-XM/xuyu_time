@@ -53,6 +53,12 @@
          * 有赞商城编码错误
          */
         final int youzanCodeError = 3;
+
+        /**
+         *数据丢失
+         */
+        final int loseEncryptedUserId = 4;
+
         String encryptedUserId = null;
         String isOauthFlag = request.getParameter("f");
         String userId = null;
@@ -80,6 +86,7 @@
             return;
         }
         if (encryptedUserId.isEmpty()) {
+            out.println(ErrHandler.Error(loseEncryptedUserId));
             return;
         }
         if (md5.getMD5(userId).equals(encryptedUserId)) {
@@ -87,6 +94,7 @@
             Teacher teacher;
             teacher = WxApi.getTeacher(AccessToken, userId);
             sqlhelper.addTeacher(encryptedUserId, teacher.getUserId(), teacher.getMobile(), teacher.getName());
+
         } else {
             out.println(ErrHandler.Error(urlMatch));
             return;
@@ -101,42 +109,45 @@
 </head>
 <body>
 <%
-    if(setTimeFlag!=null){
-        if (TimeUtils.getTimeDifference(setTimeFlag) < 7 ) {
-            response.sendRedirect("showSuccess.jsp?u=" + encryptedUserId + "&n=" + name);
+    if (setTimeFlag != null) {
+        if (TimeUtils.getTimeDifference(setTimeFlag) < 7) {
+            response.sendRedirect("showSuccess.jsp?u=" + encryptedUserId);
             return;
 
         }
 
-    } else {
+    }
 
-        String itemId = YouzanApi.getItem_id(userId + ":" + name);
-        if (itemId == null) {
-            out.print(ErrHandler.Error(youzanCodeError));
-            return;
-        }
+    String itemId = YouzanApi.getItem_id(userId + ":" + name);
+    if (itemId == null) {
+        out.print(ErrHandler.Error(youzanCodeError));
+        return;
+    }
 %>
 
 
 <h3 align="center">可上课时间设置</h3>
 <%
     String beginTime = timeutils.getNextweekday(new Date(), timeutils.difference(timeutils.getWeekOfDate(new Date())) - 6);
-    String overTime = timeutils.getNextweekday(new Date(), timeutils.difference(timeutils.getWeekOfDate(new Date())) + 1);
+    String overTime = timeutils.getNextweekday(new Date(), timeutils.difference(timeutils.getWeekOfDate(new Date())));
     sqlhelper.setTime(encryptedUserId, beginTime, overTime);
 %>
 <div align="center"><%=beginTime %> 至 <%=overTime %>
 </div>
-<form action="setTimeSubmit.jsp?u=<%=encryptedUserId%>&n=<%=name %>" method="post">
+<form action="setTimeSubmit.jsp?u=<%=encryptedUserId%>" method="post">
     <table align="center" border="1" width="100%" rules=cols frame=void style="line-height:35px;">
         <%
 
             Set choosed = new HashSet();
-            String[] CNT_CHOOSED = YouzanApi.getCNT_CHOOSED(Long.parseLong(itemId)).split(",");
-            if (CNT_CHOOSED != null || (CNT_CHOOSED == null && CNT_CHOOSED.length != 0)) {
-                for (int i = 0; i < CNT_CHOOSED.length; i++) {
-                    if (!StringUtils.isBlank(CNT_CHOOSED[i])) {
-                        int a = Integer.valueOf(CNT_CHOOSED[i]);
-                        choosed.add(a);
+            String cnt = YouzanApi.getCNT_CHOOSED(Long.parseLong(itemId));
+            if (cnt != null) {
+                String[] CNT_CHOOSED = cnt.split(",");
+                if (!(CNT_CHOOSED == null || (CNT_CHOOSED != null && CNT_CHOOSED.length == 0))) {
+                    for (int i = 0; i < CNT_CHOOSED.length; i++) {
+                        if (!StringUtils.isBlank(CNT_CHOOSED[i])) {
+                            int a = Integer.valueOf(CNT_CHOOSED[i]);
+                            choosed.add(a);
+                        }
                     }
                 }
             }
@@ -214,17 +225,18 @@
     <table id="promptTable" align="center">
 
         <tr>
-            <td align="center"><input type="checkbox" id="exampleDefaultCheckedCheckbox" value="上午" onclick="return false;"
-                                      checked="checked"><span>时间</span></td>
+            <td align="center"><input type="checkbox" id="exampleDefaultCheckedCheckbox" value="上午"
+                                      onclick="return false;"
+                                      checked="checked"><span>上午</span></td>
             <td align="left">表示有学生已经预定该时段课程</td>
         </tr>
         <tr>
-            <td align="center"><input type="checkbox" value="上午" onclick="return false;"
+            <td align="center"><input type="checkbox" value="下午" onclick="return false;"
                                       checked="checked"><span>上午</span></td>
             <td align="left">表示您可以选择在该时段上课</td>
         </tr>
         <tr>
-            <td align="center"><input type="checkbox" value="上午" onclick="return false;"><span>下午</span>
+            <td align="center"><input type="checkbox" value="晚上" onclick="return false;"><span>晚上</span>
             </td>
             <td align="left">留空表示不在该时段上课</td>
         </tr>
@@ -234,14 +246,5 @@
     <div align="center"><input type="submit" value="提交" id="teacherTimeSubmitButton">
     </div>
 </form>
-
-
-<%
-
-
-    }
-
-
-%>
 </body>
 </html>
